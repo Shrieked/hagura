@@ -1,37 +1,144 @@
-## Webjeda Hagura Theme
+<p align=center>
+<img src="https://docs.faav.tk/logo.svg">
+</p>
 
-[**Demo**](http://webjeda.com/hagura)
+<p align=center>
+Unofficial NameMC API Documentation made by Faav.<br>
+Documentation for https://namemc.com and www.faav.tk/v1/namemc.<br><br>
+</p>
 
-Hagura is a theme made for blogs with long text paragraphs. Made to be easy on eyes as well with a switchable theme.
+---
+<br>
 
-Suitable fonts are selected for better readability. Since the theme is created for smartphone reading, the theme is very light and it loads instantly even on a slow data connection.
+## Contents
+- [About](#about)
 
-The theme comes with pre-installed analytics, disqus and html compressor. But make sure you change key parameters in the _config.yml file.
+- [Limitations](#limitations)
 
+- [Routes](#routes)
 
+- [Official NameMC API](<#official-namemc-api>)
 
-## Installation
-* Fork the repository
-* Go to settings and set Github Pages source as master.
-* Your new site should be ready at https://username.github.io/hagura/
+- [Usage Examples](<#usage-examples>)
+	- [JavaScript](#javascript)
+	- [PHP](#php)
+	- [Java](#java)
+<br>
 
+## About
+I created this API for people who need to use NameMC's database in a automated way.
 
-Default theme will look like this
+<br>
 
-![webjeda hagura jekyll theme](https://webjeda.com/hagura/assets/images/hagura-1.png)
+## Limitations
+This API scrapes the NameMC website in order to provide accurate responses. If the NameMC layout changes or goes offline, this API will provide inaccurate information or will not function at all. Please keep this in mind while using this API. 
 
-Switch to Dark Theme
+<br>
 
-![webjeda hagura dark jekyll theme](https://webjeda.com/hagura/assets/images/hagura-dark-jekyll-theme.png)
+## Routes
+- NameMC Skin Hash API ([documentation](./docs/skinhash.md))
+- NameMC Cape Hash API ([documentation](./docs/capehash.md))
+- NameMC Capes API ([documentation](./docs/capes.md))
+- NameMC Cape Count API ([documentation](./docs/capecount.md))
+- NameMC Face Icon API ([documentation](./docs/face.md))
+- NameMC Connections API ([documentation](./docs/accounts.md))
+- NameMC Connections Count API ([documentation](./docs/accountscount.md))
+- NameMC Rank API ([documentation](./docs/rank.md))
+- NameMC Emoji API ([documentation](./docs/emoji.md))
+- NameMC Custom Font API ([documentation](./docs/font.md))
+- NameMC Favorite Servers API ([documentation](./docs/favservers.md))
+- NameMC Favorite Servers Count API ([documentation](./docs/favservers_count.md))
 
-This theme is responsive.
+<br>
 
-![webjeda hagura responsive jekyll theme](https://webjeda.com/hagura/assets/images/hagura-responsive.png)
+## Official NameMC API
+- NameMC Friends API ([documentation](./docs/friends.md))
 
+<br>
 
-## Development
-Make changes to the **master** branch and create a pull request. Do not use **gh-pages** branch as it is used to host the theme.
+## Usage Examples
 
+### JavaScript:
 
-## License
-MIT License 
+[See it in action](https://www.faav.tk/usage/html)
+```html
+<html>
+<head>
+	<script>
+	var getJSON = function(url, callback) {
+	   var xhr = new XMLHttpRequest();
+	   xhr.open('GET', url, true);
+	   xhr.responseType = 'json';
+	   xhr.onload = function() {
+	     var status = xhr.status;
+	     if (status === 200) {
+	       callback(null, xhr.response);
+	     } else {
+	       callback(status, xhr.response);
+	     }
+	   };
+	   xhr.send();
+	};
+
+	getJSON('https://www.faav.tk/v1/namemc/capecount?username=Marc',
+	function(err, data) {
+	 if (err !== null) {
+	   document.getElementById('marc').innerHTML = err;
+	 } else {
+	   document.getElementById('marc').innerHTML = 'Marc has '+data.formatted+' capes.';
+	 }
+	});
+	</script>
+</head>
+	<body>
+	<p id="marc">Marc has 0 capes.</p>
+	</body>
+</html>
+```
+<br>
+
+### PHP:
+
+[See it in action](https://www.faav.tk/usage/php)
+```php 
+<?php 
+$namemc_api = json_decode(file_get_contents("https://www.faav.tk/v1/namemc/capecount?username=Marc"), false);
+$marcs_capes = $namemc_api -> formatted;
+ echo '<p>Marc has '.$marcs_capes." capes.</p>";
+?>
+```
+<br>
+
+### Java:
+
+#### OkHttp & Gson:
+```java
+public static void main(String[] args) {
+	final OkHttpClient okHttpClient = new OkHttpClient();
+	final Gson gson = new Gson();
+
+	final Request request = new Request.Builder()
+		.url("https://www.faav.tk/v1/namemc/capecount?username=Marc")
+		.get()
+		.build();
+
+	try (final Response response = okHttpClient.newCall(request).execute()) {
+		if (response.isSuccessful()) {
+			final JsonObject jsonObject = gson.fromJson(response.body().charStream(), JsonObject.class);
+			System.out.printf("Marc has %s capes", jsonObject.get("formatted").getAsString());
+		}
+	} catch (IOException e) {
+		e.printStackTrace();
+	}
+}
+```
+<br>
+
+## Contributions
+Thank you JerreBor (Jero) for the Java usage example and the better Read Me file, and thank you lucky swede for the documentation template.
+
+<br>
+
+## Disclaimer
+This API is not affiliated nor indorsed by NameMC, Minecraft, Mojang, and/or Microsoft.
+
