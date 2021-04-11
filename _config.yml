@@ -1,6 +1,7 @@
 ### your site title here
 
 title: Unofficial NameMC API Docs
+baseurl: /hagura
 
 highlighter: rouge
 markdown: kramdown
