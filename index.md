@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="https://shrieked.github.io/hagura/assets/css/main.css">
 <p align=center>
 <img src="https://docs.faav.tk/logo.svg">
 </p>
